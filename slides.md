@@ -2,30 +2,28 @@
 
 ## The command-line programs and features discussed here...
 
-* Started with the Unix operating system
+* [Started with the Unix operating system][unix-history]
 * Many modern operating systems are Unix-like, including
     * Linux
     * OS X
 * Windows isn't Unix-like, but you can
     * connect remotely to another computer
-    * use Cygwin
+    * use [Cygwin][cygwin]
 
-https://upload.wikimedia.org/wikipedia/commons/7/77/Unix_history-simple.svg
 
 # Overview
 
-## Basic components of the command line
+## Basic components
 
 * terminal (gnome-terminal, iTerm2, Cygwin Terminal, …)
     * displays text to you
     * handles your keypresses (and possibly mouse clicks)
-* shell (Bash, Z shell, …)
+* shell (Bash, Z shell, tcsh, …)
     * displays the prompt (e.g., `colin@lumeh:~ $`)
         * typically represented by `$` in examples
     * interprets the commands you type
     * runs other programs
 * programs
-    * controlled by command-line options/flags
     * follow the Unix philosophy
 
 ## The Unix philosophy
@@ -38,6 +36,8 @@ https://upload.wikimedia.org/wikipedia/commons/7/77/Unix_history-simple.svg
 
 ## Command-line programs
 
+* are controlled by command line options and arguments
+    * arguments are whitespace-separated
 * start with three open file descriptors
     * `stdin` – for reading input
     * `stdout` – for writing output
@@ -55,14 +55,24 @@ https://upload.wikimedia.org/wikipedia/commons/7/77/Unix_history-simple.svg
     * `2>` redirects `stderr`
     * `<` redirects `stdin`
 
-    $ cat file1 file2 >combined
-    $ sort <data >sorted_data
-    $ grep 2>error.txt
+```bash
+$ cat file1 file2 >combined
+$ sort <data >sorted_data
+```
 
-## Chaining programs
+## Pipes
 
 * programs can be chained together using a *pipe*
+    * connects the first program's `stdout` to the second program's `stdin`
 
-    $ ls | grep md
+```bash
+$ ls | grep md
+```
 
-# Exit Codes
+# Useful programs
+
+
+
+
+[unix-history]: https://upload.wikimedia.org/wikipedia/commons/7/77/Unix_history-simple.svg
+[cygwin]: https://imgur.com/a/6hbpR
