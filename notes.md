@@ -7,8 +7,7 @@
     * Linux
     * OS X
 * Windows isn't Unix-like, but you can
-    * connect remotely to another computer
-    * use [Cygwin][cygwin]
+    * [use Cygwin][cygwin]
 
 # Overview
 
@@ -78,12 +77,27 @@ $ ls -tr | tail -1                          # most-recently-modified file
 $ ps -e | grep auda                         # is Audacity running?
 $ sort <stuff | uniq                        # print unique lines from stuff
 $ tr -cs A-Za-z '\n' <file | tr A-Z a-z | \
-> | sort | uniq -c | sort -rn | sed ${1}q   # print most common words w/ freq.
+  | sort | uniq -c | sort -rn | sed ${1}q   # print most common words w/ freq.
 ```
 
 ## Multiple commands
 
+* Commands can be sequenced in several ways
+    * `foo; bar`: Execute `foo` then `bar`.
+    * `foo && bar`: Execute `foo`; if `foo` is successful (exit status == 0),
+      then execute `bar`.
+    * `foo || bar`: Execute `foo`; if `foo` is *not* successful then execute
+      `bar`.
+    * In all cases, the exit status of the sequence is the exit status of the
+      last-executed command.
 
+## Running commands in the background
+
+* `&` at the end of a command runs it in the background
+* `jobs`: list currently running/suspended commands
+* **Ctrl+z**: suspend a command running in the foreground
+* `bg`: start a suspended command running in the background
+* `fg`: start a suspended command running in the foreground
 
 ## Redirection
 
@@ -134,13 +148,61 @@ $ sort <data >sorted_data
     * `echo file?.txt`
     * `echo file[A-Z].txt`
 
+## Arithmetic expressions
+
+* Use `(( ... ))` or `$(( ... ))` to evaluate arithmetic expressions
+    * `if (( $x < 5 )); ...`
+    * `result=$(( $base ** 2 + 0xa0 ))`
+    * `echo $(( 0xa0 ))
+
+## Conditional expressions
+
+* Old way (might be needed for compatibility: `[ ... ]` or `test ...`
+    * Be careful to quote properly!
+* Bash way: `[[ ... ]]`
+    * Quoting is not necessary.
+    * See **CONDITIONAL EXPRESSIONS** in the Bash `man` page.
+
+## If
+
+* General format: `if command; then stuff; fi`
+* If `command` exits successfully, then `stuff` is executed.
+
+```bash
+if [[ -r $file ]]; then
+  wc -l <"$file"
+fi
+```
+
+```bash
+file=/tmp/stuff.txt
+if grep ^foo "$file"; then
+  echo "$file contains a line that starts with 'foo'"
+else
+  echo "$file does not contain a line that starts with 'foo'"
+fi
+```
+
+## Loops
+
+```bash
+for i in *.mp3; do
+  echo ffmpeg -i "$i" "${i%mp3}ogg"
+done
+
+while true; do
+  echo still going...
+  sleep 1
+done
+```
+
 ## Source of truth
 
 ```bash
 $ man bash
 ```
 
-Also, read the [Bash Guide][bash-guide]
+* The [Bash Guide][bash-guide] is also very good.
 
 # Customizing your shell environment
 
@@ -265,7 +327,8 @@ git() {
 * Convert `.mp3` files to `.ogg`: `find -name *.mp3 -exec sox {} {}.ogg \;`
 * Tweet: `curl -u username -d status='Hello World, Twitter!' -d source="cURL"
   http://twitter.com/statuses/update.xml`
-* [clean up whiteboard photos with ImageMagick][whiteboard]
+* [Download file with retry and text message confirmation][download-retry]
+* [Clean up whiteboard photos with ImageMagick][whiteboard]
 * [Share your cool Bash One-Liners ?][bash-oneliners]
 
 # Wizardly tips
@@ -280,5 +343,6 @@ git() {
 [cygwin]: https://imgur.com/a/6hbpR
 [bash-guide]: http://mywiki.wooledge.org/BashGuide
 [uuoc]: https://en.wikipedia.org/wiki/Cat_%28Unix%29#Useless_use_of_cat
+[download-retry]: https://gist.github.com/kalgynirae/50389c3470eebd5a2de7
 [whiteboard]:https://gist.github.com/lelandbatey/8677901
 [bash-oneliners]: https://www.reddit.com/r/linuxadmin/comments/2lvhn7/share_your_cool_bash_oneliners/
