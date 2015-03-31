@@ -45,19 +45,45 @@
     * integer, 0 to 255
     * 0 means success
     * meaning of other numbers differs per program
+* often have a "man page" or a help option
+    * `man wc`
+    * `tr --help`
+    * `git add -h`
 
-## Pipes
+# Shell basics
 
-* programs can be chained together using a *pipe*
-    * connects the first program's `stdout` to the second program's `stdin`
+Disclaimer: I use **Bash** because it is the default in most Linux
+distributions. All of the examples work in Bash, and the majority of them should
+work in **sh** as well. However, the concepts are general enough that you should
+be able to adapt them to whatever shell you choose.
+
+## Important keyboard shortcuts
+
+* **Ctrl+c** (`^C`): terminate the currently running program
+* **Up**: recall previously-entered commands
+
+## Shell scripts
+
+* A shell script is just a file where each line is a command.
+* Executing a shell script is no different than typing the lines of the script
+  one at a time at the shell prompt.
+
+## Chaining commands (pipes)
+
+* Programs can be chained together using a *pipe*
+    * Connects the first program's `stdout` to the second program's `stdin`
 
 ```bash
 $ ls -tr | tail -1                          # most-recently-modified file
 $ ps -e | grep auda                         # is Audacity running?
 $ sort <stuff | uniq                        # print unique lines from stuff
 $ tr -cs A-Za-z '\n' <file | tr A-Z a-z | \
-  | sort | uniq -c | sort -rn | sed ${1}q   # print most common words w/ freq.
+> | sort | uniq -c | sort -rn | sed ${1}q   # print most common words w/ freq.
 ```
+
+## Multiple commands
+
+
 
 ## Redirection
 
@@ -108,6 +134,14 @@ $ sort <data >sorted_data
     * `echo file?.txt`
     * `echo file[A-Z].txt`
 
+## Source of truth
+
+```bash
+$ man bash
+```
+
+Also, read the [Bash Guide][bash-guide]
+
 # Customizing your shell environment
 
 ## Prompt
@@ -126,17 +160,52 @@ that's better
 
 ## Aliases
 
+* simple replacements
+
 ```bash
 $ alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
 $ myip
 68.101.68.150
+$ alias ll='ls -lh'
+$ alias grep='grep --color'
 ```
 
 ## Functions
 
-# Useful programs
+* more complex than aliases
 
-# Common Unix/Linux programs
+```bash
+mkcd() {
+    mkdir -p "$1"
+    cd "$1"
+}
+
+git() {
+    if command git rev-parse --is-inside-work-tree &>/dev/null; then
+        command git "$@"
+    else
+        echo "Not a git repo. You probably meant:"
+        hg githelp -- git "$@"
+    fi
+}
+```
+
+## Environment variables
+
+* `EDITOR`: default text editor (used by things like `git commit`)
+* `LESS`: default options for `less`
+* `HISTSIZE`: how many past commands Bash should save
+* `PS1`: prompt, as mentioned earlier
+
+## Shell options
+
+* `set -o noclobber`: Tells Bash to refuse to overwrite files with redirection
+    * can be overridden using the special redirection operator `>|`
+* `bind '"\e[A":history-search-backward'`: Make up-arrow recall commands that
+  prefix match with what you've typed so far
+* `bind '"\e[B":history-search-forward'`: likewise for down-arrow
+
+# Useful programs
 
 ## Shell builtins
 
@@ -155,7 +224,7 @@ $ myip
 * `tr`: Translate/delete characters
 * `sort`: Sort input lines
 * `uniq`: Report or omit repeated lines
-* `cat`: Concatenate files (watch out for [UUOC][uuoc])
+* `cat`: Concatenate files (watch out for [Useless Use of Cat][uuoc])
 * `wc`: Count words/lines/characters
 
 ## Files
@@ -163,30 +232,53 @@ $ myip
 * `mv`: Move/rename files/directories
 * `cp`: Copy files/directories
 * `mkdir`/`rmdir`: Create/remove directories
-* `tar`:
-* `rsync`:
+* `tar`: Create/extract archives (optionally compressed)
+* `rsync`: Super-advanced `cp` with all the options you could possibly imagine
+* `find`: Find files/directories and run commands on them
 
-## youtube-dl
+## Editors
 
-[youtube-dl][youtube-dl]
+* `nano`: Beginner-friendly text editor
+* `vim`: Non-beginner-friendly text editor
+* `emacs`: Text editor for people who like Lisp
 
-## ImageMagick
+## Network
 
-* [clean up whiteboard photos][whiteboard]
+* `ping`: Test connectivity
+* `ssh`: Securely connect/tunnel to remote computers
+* `scp`: Copy files via ssh
+* `curl`: Download things and make HTTP requests
+* `dig`: Make DNS queries
 
-# Examples
+## Other
+
+* `youtube-dl`: Download videos from YouTube
+* `mplayer`: Audio/video player
+* ImageMagick (`convert`): Convert/manipulate images
+
+# Nifty examples
 
 * Rename spaces to underscores: `for i in *; do mv "$i" ${i// /_}; done`
     * Safer: `for i in ./*' '*; do mv "$i" "${i// /_}"; done`
 * Most-recently-modified file: `ls -tr | tail -1`
 * Get public IP address: `dig +short myip.opendns.com @resolver1.opendns.com`
 * Convert `.mp3` files to `.ogg`: `find -name *.mp3 -exec sox {} {}.ogg \;`
+* Tweet: `curl -u username -d status='Hello World, Twitter!' -d source="cURL"
+  http://twitter.com/statuses/update.xml`
+* [clean up whiteboard photos with ImageMagick][whiteboard]
 * [Share your cool Bash One-Liners ?][bash-oneliners]
+
+# Wizardly tips
+
+## Common command-line options
+
+* `-` in place of a filename means read from `stdin` or write to `stdout`
+* `--` means no options follow (might be needed if you have a filename that
+  starts with a hyphen)
 
 [unix-history]: https://upload.wikimedia.org/wikipedia/commons/7/77/Unix_history-simple.svg
 [cygwin]: https://imgur.com/a/6hbpR
+[bash-guide]: http://mywiki.wooledge.org/BashGuide
 [uuoc]: https://en.wikipedia.org/wiki/Cat_%28Unix%29#Useless_use_of_cat
-[youtube-dl]: https://rg3.github.io/youtube-dl/
-[imagemagick]: http://imagemagick.org/
 [whiteboard]:https://gist.github.com/lelandbatey/8677901
 [bash-oneliners]: https://www.reddit.com/r/linuxadmin/comments/2lvhn7/share_your_cool_bash_oneliners/
