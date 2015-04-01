@@ -1,13 +1,35 @@
 # Command-Line Wizardry
 
-## The command-line programs and features discussed here...
+> “Any sufficiently advanced command-line user is indistinguishable from a
+> wizard.”
+>
+> — Chan's 3rd law
 
-* [Started with the Unix operating system][unix-history]
-* Many modern operating systems are Unix-like, including
+## This document...
+
+* is in general about the command-line environment on [Unix-like
+  systems][unix-history], especially
     * Linux
     * OS X
 * Windows isn't Unix-like, but you can
     * [use Cygwin][cygwin]
+
+## Recommendations for installing software
+
+* Linux: use your system's package manager
+* OS X: use [Homebrew][homebrew]
+* Windows: [use Cygwin][cygwin]
+
+### What is a package manager?
+
+> A **package manager** or **package management system** is a collection of
+> software tools that automates the process of installing, upgrading,
+> configuring, and removing software packages for a computer's operating system
+> in a consistent manner. It typically maintains a database of software
+> dependencies and version information to prevent software mismatches and
+> missing prerequisites.
+>
+> — Wikipedia
 
 # Overview
 
@@ -196,6 +218,11 @@ while true; do
 done
 ```
 
+## Command substitution
+
+* Some programs refuse to read from stdin.
+...
+
 ## Source of truth
 
 ```bash
@@ -282,12 +309,13 @@ git() {
 * `less`: View contents of a file or `stdin`
 * `grep`: Print lines containing a regex match
 * `head`/`tail`: Print the first/last lines of a file
-* `sed`: Perform regex substitutions on each line (and more)
 * `tr`: Translate/delete characters
 * `sort`: Sort input lines
 * `uniq`: Report or omit repeated lines
 * `cat`: Concatenate files (watch out for [Useless Use of Cat][uuoc])
 * `wc`: Count words/lines/characters
+* `sed`: Perform regex substitutions on each line (and more)
+* `awk`: More complicated than `sed`
 
 ## Files
 
@@ -297,6 +325,7 @@ git() {
 * `tar`: Create/extract archives (optionally compressed)
 * `rsync`: Super-advanced `cp` with all the options you could possibly imagine
 * `find`: Find files/directories and run commands on them
+* `tree`: Print a nice ASCII filesystem tree
 
 ## Editors
 
@@ -327,11 +356,17 @@ git() {
 * Convert `.mp3` files to `.ogg`: `find -name *.mp3 -exec sox {} {}.ogg \;`
 * Tweet: `curl -u username -d status='Hello World, Twitter!' -d source="cURL"
   http://twitter.com/statuses/update.xml`
+* Stopwatch: `time read`
+* Star Wars: `telnet towel.blinkenlights.nl`
 * [Download file with retry and text message confirmation][download-retry]
 * [Clean up whiteboard photos with ImageMagick][whiteboard]
 * [Share your cool Bash One-Liners ?][bash-oneliners]
 
 # Wizardly tips
+
+## SSH
+
+...
 
 ## Common command-line options
 
@@ -339,8 +374,14 @@ git() {
 * `--` means no options follow (might be needed if you have a filename that
   starts with a hyphen)
 
+## Navigation
+
+* `pushd`: like `cd` but puts the old directory onto a stack so you can `popd`
+  to get back.
+
 [unix-history]: https://upload.wikimedia.org/wikipedia/commons/7/77/Unix_history-simple.svg
 [cygwin]: https://imgur.com/a/6hbpR
+[homebrew]: http://brew.sh/
 [bash-guide]: http://mywiki.wooledge.org/BashGuide
 [uuoc]: https://en.wikipedia.org/wiki/Cat_%28Unix%29#Useless_use_of_cat
 [download-retry]: https://gist.github.com/kalgynirae/50389c3470eebd5a2de7
