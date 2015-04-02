@@ -99,7 +99,7 @@ be able to adapt them to whatever shell you choose.
 $ ls -tr | tail -1                          # most-recently-modified file
 $ ps -e | grep auda                         # is Audacity running?
 $ sort <stuff | uniq                        # print unique lines from stuff
-$ tr -cs A-Za-z '\n' <file | tr A-Z a-z | \
+$ tr -cs A-Za-z '\n' <file | tr A-Z a-z \
   | sort | uniq -c | sort -rn | sed ${1}q   # print most common words w/ freq.
 ```
 
