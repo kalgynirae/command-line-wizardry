@@ -127,9 +127,12 @@ $ tr -cs A-Za-z '\n' <file | tr A-Z a-z | \
 * `stdin`, `stdout`, and `stderr` are usually connected to the terminal
 * can be directed to a file instead
     * `>` (or `1>`) redirects `stdout`
-    * `>>` redirects `stdout`, not overwriting the file
+        * `>>` appends to the file (if it exists) instead of overwriting it
     * `2>` redirects `stderr`
-    * `<` redirects `stdin`
+    * `<` (or `0<`) redirects `stdin`
+    * `2>&1` means `stderr` is made to be a copy of `stdout`
+        * to redirect `stdout` and `stderr` to the same file, you can do
+          `>file 2>&1` or (Bash only) `&>file`.
 
 ```bash
 $ cat data{1,2,3,4,5}.txt >combined.txt
