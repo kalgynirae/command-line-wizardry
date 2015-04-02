@@ -148,7 +148,7 @@ $ sort <data >sorted_data
 * single quotes:
     * all characters are literal
 * double quotes:
-    * `$`, ```, `\\`, and `!` have special meaning
+    * `$`, `` ` ``, `\\`, and `!` have special meaning
     * use when expanding variables that might contain special characters:
         * `$ python enhance-coolness.py "$infile"`
 
