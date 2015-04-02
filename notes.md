@@ -82,6 +82,7 @@ be able to adapt them to whatever shell you choose.
 
 * **Ctrl+c** (`^C`): terminate the currently running program
 * **Up**: recall previously-entered commands
+* **Ctrl+d**: End-of-file
 
 ## Shell scripts
 
@@ -126,6 +127,7 @@ $ tr -cs A-Za-z '\n' <file | tr A-Z a-z | \
 * `stdin`, `stdout`, and `stderr` are usually connected to the terminal
 * can be directed to a file instead
     * `>` (or `1>`) redirects `stdout`
+    * `>>` redirects `stdout`, not overwriting the file
     * `2>` redirects `stderr`
     * `<` redirects `stdin`
 
@@ -143,7 +145,7 @@ $ sort <data >sorted_data
 * single quotes:
     * all characters are literal
 * double quotes:
-    * `$`, ````, `\\`, and `!` have special meaning
+    * `$`, ```, `\\`, and `!` have special meaning
     * use when expanding variables that might contain special characters:
         * `$ python enhance-coolness.py "$infile"`
 
@@ -175,7 +177,7 @@ $ sort <data >sorted_data
 * Use `(( ... ))` or `$(( ... ))` to evaluate arithmetic expressions
     * `if (( $x < 5 )); ...`
     * `result=$(( $base ** 2 + 0xa0 ))`
-    * `echo $(( 0xa0 ))
+    * `echo $(( 0xa0 ))`
 
 ## Conditional expressions
 
@@ -233,6 +235,8 @@ $ man bash
 
 # Customizing your shell environment
 
+These things can be placed in your `~/.bashrc` file.
+
 ## Prompt
 
 * printed before you type each command
@@ -255,9 +259,12 @@ that's better
 $ alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
 $ myip
 68.101.68.150
-$ alias ll='ls -lh'
-$ alias grep='grep --color'
 ```
+
+* `alias ll='ls -lh'`
+* `alias grep='grep --color'`
+* `alias mv='mv -i'`
+* `alias cp='cp -i'`
 
 ## Functions
 
@@ -269,12 +276,13 @@ mkcd() {
     cd "$1"
 }
 
+# Execute 'git' if in a Git repo; otherwise, execute 'hg githelp'
 git() {
     if command git rev-parse --is-inside-work-tree &>/dev/null; then
         command git "$@"
     else
         echo "Not a git repo. You probably meant:"
-        hg githelp -- git "$@"
+        hg githelp -- git "$@"    # githelp is not in normal Mercurial :(
     fi
 }
 ```
@@ -303,6 +311,7 @@ git() {
 * `alias`: Create/print aliases
 * `echo`: Print arguments
 * `type`: Find out whether a command is a built-in/function/executable
+* `which`: See the path of the executable for a command
 
 ## Text manipulation
 
@@ -346,6 +355,8 @@ git() {
 * `youtube-dl`: Download videos from YouTube
 * `mplayer`: Audio/video player
 * ImageMagick (`convert`): Convert/manipulate images
+* `sl`: Steam Locomotive
+* `toilet`/`figlet`: Make fancy ASCII-art text
 
 # Nifty examples
 
@@ -366,7 +377,8 @@ git() {
 
 ## SSH
 
-...
+* You can set up aliases in `~/.ssh/config` so that you can type, for example,
+  `ssh lemon` instead of `ssh colin@lemon.lumeh.org`.
 
 ## Common command-line options
 
