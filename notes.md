@@ -70,6 +70,7 @@
     * `man wc`
     * `tr --help`
     * `git add -h`
+    * `help pushd` (for Bash builtins)
 
 # Shell basics
 
