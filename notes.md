@@ -168,9 +168,11 @@ $ sort <data >sorted_data
     * remove suffix: `echo ${infile%.txt}.mp3`
     * pattern substitution: `mv "$foo" "${foo/TXT/txt}"`
 * command substitution: replace command with its output
-    * `echo The date is $(date).`
+    * `echo The date is "$(date)".`
     * Can also use backticks, but they are less safe (can't nest, some
       characters are interpreted unexpectedly).
+    * Don't forget to quote the command substitution if the output might contain
+      spaces or other special characters!
 * glob (pathname): `*` `?` and `[...]` in paths
     * `echo *.txt`
     * `echo file?.txt`
